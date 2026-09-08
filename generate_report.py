@@ -1,6 +1,6 @@
 """
-Script to generate a comprehensive, publication-quality 3-page PDF report for:
-NLP Group Assignment 1 — Question 3: Efficient Spelling Corrector
+Script to generate a comprehensive, publication-quality 3-page PDF technical report for:
+Building, Benchmarking, and Deploying an Efficient Spelling Corrector
 """
 
 import os
@@ -98,8 +98,8 @@ class NumberedCanvas(canvas.Canvas):
 
         # Header (Pages 2+)
         if self._pageNumber > 1:
-            self.drawString(54, 755, "NLP Group Assignment 1 — Question 3 Report")
-            self.drawRightString(558, 755, "Spelling Corrector (Brown Corpus)")
+            self.drawString(54, 755, "Technical Report: Building an Efficient Spelling Corrector")
+            self.drawRightString(558, 755, "Brown Corpus Language Model")
             self.setLineWidth(0.5)
             self.setStrokeColor(colors.HexColor("#cbd5e1"))
             self.line(54, 749, 558, 749)
@@ -109,7 +109,7 @@ class NumberedCanvas(canvas.Canvas):
         self.setStrokeColor(colors.HexColor("#cbd5e1"))
         self.line(54, 42, 558, 42)
         self.setFont("Helvetica", 8)
-        self.drawString(54, 30, "Repository: https://github.com/chaitanyakumarAI/NLP_GA")
+        self.drawString(54, 30, "GitHub: https://github.com/chaitanyakumarAI/NLP_GA")
         page_str = f"Page {self._pageNumber} of {page_count}"
         self.drawRightString(558, 30, page_str)
         self.restoreState()
@@ -201,17 +201,17 @@ def build_pdf_report(pdf_filename="Question_3_Spelling_Corrector_Report.pdf"):
     story = []
 
     # ==================================================================
-    # PAGE 1: Title, Metadata, Architecture, and Part 1 (Corpus & LM)
+    # PAGE 1: Title, Metadata, Architecture, and Corpus & LM
     # ==================================================================
-    story.append(Paragraph("Natural Language Processing — Group Assignment 1", subtitle_style))
-    story.append(Paragraph("Question 3: Building, Benchmarking, and Deploying an Efficient Spelling Corrector", title_style))
+    story.append(Paragraph("Natural Language Processing — Technical Report", subtitle_style))
+    story.append(Paragraph("Building, Benchmarking, and Deploying an Efficient Spelling Corrector", title_style))
     story.append(HRFlowable(width="100%", thickness=1.2, color=accent_blue, spaceBefore=3, spaceAfter=6))
 
-    # Metadata Table
+    # Metadata Table (clean, no marking scheme)
     meta_data = [
         [
             Paragraph("<b>Target Corpus:</b> NLTK Brown Corpus", body_style),
-            Paragraph("<b>Marking Scheme:</b> 40 Total Marks", body_style),
+            Paragraph("<b>Language Model:</b> Interpolated Bigram (λ = 0.7)", body_style),
             Paragraph("<b>Repository:</b> chaitanyakumarAI/NLP_GA", body_style)
         ],
         [
@@ -220,7 +220,7 @@ def build_pdf_report(pdf_filename="Question_3_Spelling_Corrector_Report.pdf"):
             Paragraph("<b>Deployment:</b> Interactive Continuous Terminal CLI", body_style)
         ]
     ]
-    meta_table = Table(meta_data, colWidths=[165, 155, 184])
+    meta_table = Table(meta_data, colWidths=[165, 165, 174])
     meta_table.setStyle(TableStyle([
         ("BACKGROUND", (0, 0), (-1, -1), colors.HexColor("#f8fafc")),
         ("BOX", (0, 0), (-1, -1), 0.6, colors.HexColor("#cbd5e1")),
@@ -236,58 +236,52 @@ def build_pdf_report(pdf_filename="Question_3_Spelling_Corrector_Report.pdf"):
     # Section 1: Executive Summary
     story.append(Paragraph("1. Executive Summary & Architecture", h1_style))
     story.append(Paragraph(
-        "This report presents an end-to-end implementation and empirical analysis of a production-grade spelling corrector "
-        "designed for the Brown Corpus. The system detects and corrects both <b>non-word errors</b> (out-of-vocabulary words) "
+        "This report presents the complete design, algorithmic formulation, and empirical evaluation of a high-performance "
+        "spelling corrector evaluated on the Brown Corpus. The system detects and corrects both <b>non-word errors</b> (out-of-vocabulary words) "
         "and <b>real-word errors</b> (valid vocabulary words used incorrectly in context) within an edit distance of 1. "
         "We implement and contrast two candidate generation paradigms (Standard Edit Distance 1 vs. Symmetric Delete), "
-        "integrate a smoothed bigram language model, execute rigorous benchmarks across 9,181 test items, and deploy a live terminal CLI.", body_style
+        "integrate an interpolated bigram language model, execute comprehensive benchmarks across 9,181 test items, and deploy a live terminal CLI.", body_style
     ))
 
-    # Architecture Table
+    # Architecture Table (Clean 3-column format without rubric marks)
     arch_data = [
         [
-            Paragraph("<b>Component</b>", h2_style),
+            Paragraph("<b>System Module</b>", h2_style),
             Paragraph("<b>Source File</b>", h2_style),
-            Paragraph("<b>Marks</b>", h2_style),
-            Paragraph("<b>Description & Implementation Details</b>", h2_style)
+            Paragraph("<b>Technical Implementation Details</b>", h2_style)
         ],
         [
-            Paragraph("<b>Part 1: Corpus & Model</b>", body_style),
+            Paragraph("<b>Corpus & Model</b>", body_style),
             Paragraph("<code>corpus_model.py</code>", code_style),
-            Paragraph("6", body_style),
             Paragraph("Cleans 56,766 Brown sentences; extracts 40,234 unique words and unigram frequencies (981,716 tokens). "
                       "Implements linearly-interpolated bigram probability model (λ = 0.7) with O(1) context lookups and boundary-safe scoring.", body_style)
         ],
         [
-            Paragraph("<b>Part 2: Candidate Gen</b>", body_style),
+            Paragraph("<b>Candidate Generation</b>", body_style),
             Paragraph("<code>candidates.py</code>", code_style),
-            Paragraph("10", body_style),
             Paragraph("<b>Method A:</b> Norvig ED1 combinatorial generator (deletions, transpositions, substitutions, insertions).<br/>"
                       "<b>Method B:</b> SymSpell precomputed 1-deletion dictionary + exact O(L) distance-1 verification.", body_style)
         ],
         [
-            Paragraph("<b>Part 3: Correction Logic</b>", body_style),
+            Paragraph("<b>Correction Engine</b>", body_style),
             Paragraph("<code>correction.py</code>", code_style),
-            Paragraph("8", body_style),
             Paragraph("<b>Non-word:</b> Argmax unigram frequency ranking.<br/>"
                       "<b>Real-word:</b> Bigram context log-odds disambiguation with short-word suppression (len ≤ 2) and thresholding margin (θ = 1.0).", body_style)
         ],
         [
-            Paragraph("<b>Part 4: Benchmark & Eval</b>", body_style),
+            Paragraph("<b>Benchmark & Evaluation</b>", body_style),
             Paragraph("<code>evaluate.py</code>", code_style),
-            Paragraph("8", body_style),
             Paragraph("Controlled typo generation on 10% Brown sample (5,658 non-word, 3,523 real-word). "
                       "1,000-word Speed Demon benchmark with latency reporting and theoretical complexity analysis.", body_style)
         ],
         [
-            Paragraph("<b>Part 5: Interactive CLI</b>", body_style),
+            Paragraph("<b>Interactive Deployment</b>", body_style),
             Paragraph("<code>cli.py</code>", code_style),
-            Paragraph("8", body_style),
             Paragraph("Continuous while-loop terminal application with ANSI color and asterisk emphasis, "
                       "per-query latency measurement, and clean exit handling.", body_style)
         ]
     ]
-    arch_table = Table(arch_data, colWidths=[105, 80, 32, 287])
+    arch_table = Table(arch_data, colWidths=[115, 90, 299])
     arch_table.setStyle(TableStyle([
         ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#f1f5f9")),
         ("BOTTOMPADDING", (0, 0), (-1, -1), 2.5),
@@ -299,8 +293,8 @@ def build_pdf_report(pdf_filename="Question_3_Spelling_Corrector_Report.pdf"):
     story.append(arch_table)
     story.append(Spacer(1, 4))
 
-    # Section 2: Part 1 - Corpus & Language Modeling
-    story.append(Paragraph("2. Part 1: Corpus Preparation & Language Modeling", h1_style))
+    # Section 2: Corpus & Language Modeling
+    story.append(Paragraph("2. Corpus Preparation & Language Modeling", h1_style))
     story.append(Paragraph(
         "<b>Corpus Statistics:</b> Sentences are extracted from <code>nltk.corpus.brown.sents()</code>, filtering tokens "
         "to pure alphabetical lowercase words. This yields <b>56,766 sentences</b>, <b>981,716 running tokens</b>, and a vocabulary "
@@ -326,11 +320,11 @@ def build_pdf_report(pdf_filename="Question_3_Spelling_Corrector_Report.pdf"):
     ))
 
     # ==================================================================
-    # PAGE 2: Candidate Generation (Part 2) & Correction Logic (Part 3)
+    # PAGE 2: Candidate Generation & Correction Logic
     # ==================================================================
     story.append(PageBreak())
 
-    story.append(Paragraph("3. Part 2: Candidate Generation Strategies", h1_style))
+    story.append(Paragraph("3. Candidate Generation Strategies", h1_style))
     story.append(Paragraph(
         "<b>Method A (Standard Edit Distance 1):</b> Employs brute-force combinatorial generation across all 4 elementary edit operations "
         "for a query word w of length L over lowercase English alphabet Σ (|Σ| = 26):<br/>"
@@ -358,7 +352,7 @@ def build_pdf_report(pdf_filename="Question_3_Spelling_Corrector_Report.pdf"):
     story.append(Spacer(1, 4))
 
     # Section 4: Correction Logic
-    story.append(Paragraph("4. Part 3: Spelling Correction Logic & Guardrails", h1_style))
+    story.append(Paragraph("4. Spelling Correction Logic & Guardrails", h1_style))
     story.append(Paragraph(
         "<b>Non-Word Error Correction:</b> When token w ∉ V, candidate set C = gen(w) is generated. The candidate maximizing unigram probability "
         "c* = argmax<sub>c ∈ C</sub> C(c) is selected. In the event of no candidate matches, the original word is preserved.", body_style
@@ -376,11 +370,11 @@ def build_pdf_report(pdf_filename="Question_3_Spelling_Corrector_Report.pdf"):
     ))
 
     # ==================================================================
-    # PAGE 3: Benchmarks (Part 4), CLI Case Studies (Part 5), & Conclusion
+    # PAGE 3: Benchmarks, CLI Case Studies, & Conclusion
     # ==================================================================
     story.append(PageBreak())
 
-    story.append(Paragraph("5. Part 4: Benchmarking & Speed Demon Evaluation", h1_style))
+    story.append(Paragraph("5. Benchmarking & Speed Demon Evaluation", h1_style))
     story.append(Paragraph(
         "<b>Test Set Generation Methodology:</b> A stratified random sample of 10% of Brown sentences was extracted. For each sentence, "
         "an eligible word (len ≥ 3) was mutated via a random single edit (deletion, insertion, substitution, or adjacent transposition) "
@@ -454,10 +448,10 @@ def build_pdf_report(pdf_filename="Question_3_Spelling_Corrector_Report.pdf"):
     ))
 
     # Section 6: Interactive CLI & Case Studies
-    story.append(Paragraph("6. Part 5: Live Interactive CLI & Case Studies", h1_style))
+    story.append(Paragraph("6. Interactive Terminal CLI & Case Studies", h1_style))
     story.append(Paragraph(
         "The spelling corrector is deployed in <code>cli.py</code> as a continuous terminal CLI. It incorporates ANSI green and asterisk highlighting, "
-        "sub-millisecond latency reporting, and sentence detokenization. Below are the required test sentences evaluated on the system:", body_style
+        "sub-millisecond latency reporting, and sentence detokenization. Below are representative benchmark test sentences evaluated on the system:", body_style
     ))
 
     cli_data = [
@@ -505,13 +499,13 @@ def build_pdf_report(pdf_filename="Question_3_Spelling_Corrector_Report.pdf"):
     story.append(Spacer(1, 4))
 
     # Section 7: Conclusion
-    story.append(Paragraph("7. Conclusion & Deliverables", h1_style))
+    story.append(Paragraph("7. Conclusion & Summary", h1_style))
     story.append(Paragraph(
-        "All requirements for Question 3 have been successfully implemented and empirically verified. The system achieves full compliance "
-        "with the 40-mark rubric: 83.95% non-word accuracy, 65.00% real-word accuracy, a 12.8x Speed Demon speedup (<9 µs query latency), "
+        "The spelling corrector successfully demonstrates high accuracy and low-latency performance on the Brown Corpus. "
+        "The system delivers 83.95% non-word accuracy, 65.00% real-word accuracy, a 12.8x Speed Demon speedup (<9 µs query latency), "
         "and a real-time interactive terminal application.<br/>"
         "• <b>Complete Python Source Code:</b> <code>corpus_model.py</code>, <code>candidates.py</code>, <code>correction.py</code>, <code>evaluate.py</code>, <code>cli.py</code>.<br/>"
-        "• <b>Official GitHub Repository:</b> <font color='#1e40af'><u>https://github.com/chaitanyakumarAI/NLP_GA</u></font>", body_style
+        "• <b>GitHub Repository:</b> <font color='#1e40af'><u>https://github.com/chaitanyakumarAI/NLP_GA</u></font>", body_style
     ))
 
     # Build Document
